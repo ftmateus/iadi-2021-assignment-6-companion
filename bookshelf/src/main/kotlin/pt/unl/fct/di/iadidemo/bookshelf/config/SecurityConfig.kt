@@ -25,19 +25,7 @@ class SecurityConfig(
             .anyRequest().authenticated()
             .and().httpBasic()
             // Missing the sign-up, sign-in and sign-out endpoints
-            .and().formLogin().permitAll()
-            .successHandler { request, response, auth ->
-                response.status= HttpServletResponse.SC_ACCEPTED;
-                var jsonString : String = "{" +
-                        "\"username\": \"" + auth.name + "\","+
-                        "\"roles\": ["
-                auth.authorities.map {role -> jsonString += "\"" + role + "\","}
-                jsonString = jsonString.dropLast(1); // remove last comma
-                jsonString += "]}"
-                response.writer.println(jsonString)
-            }
-            .failureHandler { _, response, _ ->  response.status=HttpServletResponse.SC_UNAUTHORIZED}
-            // Missing the configuration for filters
+
             .and()
             .addFilterBefore(UserPasswordAuthenticationFilterToJWT ("/login",
                 super.authenticationManagerBean()),

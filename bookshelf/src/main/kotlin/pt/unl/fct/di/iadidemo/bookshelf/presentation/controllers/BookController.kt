@@ -29,7 +29,7 @@ class BookController(val books: BookService, val authors: AuthorService) : Books
 
     @CanSeeBooks
     override fun getAll(): List<BookListDTO> =
-        books.getAll().map {
+        books.getAll().map { it ->
             BookListDTO(
                 it.id,
                 it.title,
