@@ -30,7 +30,7 @@ private fun addResponseToken(authentication: Authentication, response: HttpServl
 
     val claims = HashMap<String, Any?>()
     claims["username"] = authentication.name
-    claims["roles"] = authentication.authorities
+    claims["roles"] = authentication.authorities.map { it.authority }
     val token = Jwts
             .builder()
             .setClaims(claims)
