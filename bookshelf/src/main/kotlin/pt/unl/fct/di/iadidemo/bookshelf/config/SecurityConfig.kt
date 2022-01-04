@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import pt.unl.fct.di.iadidemo.bookshelf.application.services.UserService
+import javax.servlet.http.HttpServletResponse
 
 @Configuration
 class SecurityConfig(
@@ -17,11 +18,25 @@ class SecurityConfig(
     override fun configure(http: HttpSecurity) {
         http
             .csrf().disable() // This allows applications to access endpoints from any source location
+            .cors().and()
             .authorizeRequests()
             .antMatchers("/swagger-ui.html").permitAll()
+            .antMatchers("/user/books").permitAll()
             .anyRequest().authenticated()
             .and().httpBasic()
             // Missing the sign-up, sign-in and sign-out endpoints
+            .and().formLogin().permitAll()
+            .successHandler { request, response, auth ->
+                response.status= HttpServletResponse.SC_ACCEPTED;
+                var jsonString : String = "{" +
+                        "\"username\": \"" + auth.name + "\","+
+                        "\"roles\": ["
+                auth.authorities.map {role -> jsonString += "\"" + role + "\","}
+                jsonString = jsonString.dropLast(1); // remove last comma
+                jsonString += "]}"
+                response.writer.println(jsonString)
+            }
+            .failureHandler { _, response, _ ->  response.status=HttpServletResponse.SC_UNAUTHORIZED}
             // Missing the configuration for filters
             .and()
             .addFilterBefore(UserPasswordAuthenticationFilterToJWT ("/login",
@@ -31,7 +46,6 @@ class SecurityConfig(
                 BasicAuthenticationFilter::class.java)
             .addFilterBefore(JWTAuthenticationFilter(),
                 BasicAuthenticationFilter::class.java)
-
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
