@@ -26,3 +26,5 @@ interface BookRepository : CrudRepository<BookDAO, Long>
 interface RoleRepository : CrudRepository<RoleDAO, String>
 
 interface AuthorRepository : CrudRepository<AuthorDAO, Long>
+
+interface SessionRepository : CrudRepository<SessionDAO, Long>

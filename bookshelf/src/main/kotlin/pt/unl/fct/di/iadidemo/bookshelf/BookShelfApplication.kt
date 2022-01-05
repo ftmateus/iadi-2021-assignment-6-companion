@@ -23,6 +23,10 @@ class SecurityApplication(
         val r3 = RoleDAO("USER")
         roles.saveAll(listOf(r1, r2, r3))
 
+        // Dummy users
+        users.save(UserDAO("user",BCryptPasswordEncoder().encode("password"), listOf(r3),"User"))
+        users.save(UserDAO("admin",BCryptPasswordEncoder().encode("password"), listOf(r1),"Admin"))
+
         val u1 = UserDAO("user1",BCryptPasswordEncoder().encode("password1"),listOf(r3,r2),"User 1")
         users.save(u1)
 

@@ -7,13 +7,13 @@ interface GenAPI<S,T,U> { // S - InDTO, T - ListDTO, U - LongDTO
     fun getAll():List<T>;
 
     @PostMapping
-    fun addOne(@RequestBody elem:S):Unit;
+    fun addOne(@RequestBody elem:S): U
 
     @GetMapping("{id}")
     fun getOne(@PathVariable id: Long): U
 
     @PutMapping("{id}")
-    fun updateOne(@PathVariable id: Long, @RequestBody elem:S) : Unit
+    fun updateOne(@PathVariable id: Long, @RequestBody elem:S) : U
 
     @DeleteMapping("{id}")
     fun deleteOne(@PathVariable id:Long):Unit;

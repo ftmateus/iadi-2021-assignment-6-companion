@@ -16,6 +16,13 @@ annotation class CanSeeBooks {
     }
 }
 
+@PreAuthorize(CanSeeAuthors.condition)
+annotation class CanSeeAuthors {
+    companion object {
+        const val condition:String = "true"
+    }
+}
+
 @PreAuthorize(CanAddBook.condition)
 annotation class CanAddBook {
     companion object {
