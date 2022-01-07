@@ -12,7 +12,7 @@ class SecurityApplication(
     val books:BookRepository,
     val users:UserRepository,
     val roles:RoleRepository,
-    val authors:AuthorRepository
+    val authorsRep:AuthorRepository
 ) : CommandLineRunner {
 
     @Transactional
@@ -33,8 +33,23 @@ class SecurityApplication(
         val u2 = UserDAO("admin1",BCryptPasswordEncoder().encode("password1"), listOf(r1),"Admin 1")
         users.save(u2)
 
-        val a1 = AuthorDAO(0,"Philip K. Dick")
-        authors.save(a1)
+        val authorsList : List<String> = listOf("Philip K. Dick",
+            "George R.R. Martin",
+            "Jane Austen",
+            "Mark Twain",
+            "J.K Rowling",
+            "George Orwel",
+            "Maya Angelou",
+            "Henry Miller"
+        );
+
+        val authorsDAOs : List<AuthorDAO> = authorsList.map { author ->
+            val aDAO : AuthorDAO = AuthorDAO(0, author)
+            authorsRep.save(aDAO)
+            aDAO
+        }
+
+        val a1 = authorsDAOs.get(0)
 
         val b1 = BookDAO(0,"Ubik", mutableListOf(a1), listOf(ImageDAO(0, "https://covers.openlibrary.org/b/id/9251896-L.jpg")))
         val b2 = BookDAO(0,"Do Androids Dream of Electric Sheep?", mutableListOf(a1), listOf(ImageDAO(0, "https://covers.openlibrary.org/b/id/11153217-L.jpg")))

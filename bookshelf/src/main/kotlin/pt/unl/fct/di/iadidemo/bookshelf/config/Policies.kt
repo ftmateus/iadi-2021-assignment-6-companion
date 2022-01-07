@@ -26,14 +26,14 @@ annotation class CanSeeAuthors {
 @PreAuthorize(CanAddBook.condition)
 annotation class CanAddBook {
     companion object {
-        const val condition:String = "hasRole('USER')"
+        const val condition:String = "hasRole('USER') OR hasRole('ADMIN')"
     }
 }
 
 @PreAuthorize(CanUpdateBook.condition)
 annotation class CanUpdateBook {
     companion object {
-        const val condition:String = "hasRole('REVIEWER')"
+        const val condition:String = "hasRole('REVIEWER') OR hasRole('ADMIN')"
     }
 }
 

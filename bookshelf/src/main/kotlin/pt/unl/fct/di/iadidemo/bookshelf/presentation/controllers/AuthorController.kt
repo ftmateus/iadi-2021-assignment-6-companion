@@ -33,8 +33,10 @@ class AuthorController(val authors: AuthorService) : AuthorAPI {
         ) }
 
     @CanSeeAuthors
-    override fun addOne(elem: AuthorsBookDTO) {
-        authors.addOne(AuthorDAO(0, elem.name))
+    override fun addOne(elem: AuthorsBookDTO): AuthorDTO {
+        val authorDao : AuthorDAO = AuthorDAO(0, elem.name)
+        authors.addOne(authorDao)
+        return AuthorDTO(authorDao.id, authorDao.name);
     }
 
     @CanSeeAuthors
@@ -50,8 +52,9 @@ class AuthorController(val authors: AuthorService) : AuthorAPI {
             }
 
     @CanSeeAuthors
-    override fun updateOne(id: Long, elem: AuthorsBookDTO) {
+    override fun updateOne(id: Long, elem: AuthorsBookDTO) : AuthorDTO {
         TODO("Not yet implemented")
+        return AuthorDTO(0, "");
     }
 
     @CanSeeAuthors
